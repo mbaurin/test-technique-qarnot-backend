@@ -38,7 +38,7 @@ const validateDeviceType = (req: Request, res: Response, next: () => void) => {
  * @apiName ObtenirListeTypesDappareil
  * @apiGroup TypesDappareil
  *
- * @apiSuccess {Object[]} types Liste des types de d'appareil
+ * @apiSuccess {Object[]} types Liste des types d'appareil
  * 
  * @apiSuccessExample {json} Succès-Exemple:
  *     HTTP/1.1 200 OK
@@ -61,16 +61,16 @@ app.get("/device-types", (req: Request, res: Response) => {
  * @apiName ObtenirListeTypesDappareilParNom
  * @apiGroup TypesDappareil
  *
- * @apiParam {String} name Nom du type de d'appareil
+ * @apiParam {String} name Nom du type d'appareil
  * 
- * @apiSuccess {String} name Nom du type de d'appareil
+ * @apiSuccess {String} name Nom du type d'appareil
  * @apiSuccessExample {json} Succès-Exemple:
  *     HTTP/1.1 200 OK
  *     {
  *         "name": "deviceType1"
  *     }
  * 
- * @apiError 404 TypesDappareilNonTrouve Le type de d'appareil demandé n'existe pas
+ * @apiError 404 TypesDappareilNonTrouve Le type d'appareil demandé n'existe pas
  * @apiErrorExample {json} Erreur-Exemple:
  *     HTTP/1.1 404 Not Found
  *     "Device type not found"
@@ -89,13 +89,13 @@ app.get("/device-types/:name", (req: Request, res: Response) => {
 });
 
 /**
- * @api {post} /device-types Ajouter un type de d'appareil
+ * @api {post} /device-types Ajouter un type d'appareil
  * @apiName AjouterTypeDappareil
  * @apiGroup TypesDappareil
  *
  * @apiParam {String} name Nom du type d'appareil
  * 
- * @apiSuccess {String} name Nom du type de d'appareil ajouté
+ * @apiSuccess {String} name Nom du type d'appareil ajouté
  * @apiSuccessExample {json} Succès-Exemple:
  *     HTTP/1.1 201 Created
  *     {
