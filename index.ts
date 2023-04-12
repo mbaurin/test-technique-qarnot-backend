@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import Joi from 'joi';
 
-const express = require('express');
 const app = express();
 const port = 3000;
 
@@ -34,9 +33,48 @@ const validateDeviceType = (req: Request, res: Response, next: () => void) => {
     next();
 };
 
+/**
+ * @api {get} /device-types Obtenir la liste des types d'appareil
+ * @apiName ObtenirListeTypesDappareil
+ * @apiGroup TypesDappareil
+ *
+ * @apiSuccess {Object[]} types Liste des types de d'appareil
+ * 
+ * @apiSuccessExample {json} Succès-Exemple:
+ *     HTTP/1.1 200 OK
+ *     [
+ *         {
+ *             "name": "deviceType1"
+ *         },
+ *         {
+ *             "name": "deviceType2"
+ *         }
+ *     ]
+ */
+
 app.get("/device-types", (req: Request, res: Response) => {
     res.status(200).json(deviceTypes);
 });
+
+/**
+ * @api {get} /device-types/:name Obtenir un type d'appareil par son nom
+ * @apiName ObtenirListeTypesDappareilParNom
+ * @apiGroup TypesDappareil
+ *
+ * @apiParam {String} name Nom du type de d'appareil
+ * 
+ * @apiSuccess {String} name Nom du type de d'appareil
+ * @apiSuccessExample {json} Succès-Exemple:
+ *     HTTP/1.1 200 OK
+ *     {
+ *         "name": "deviceType1"
+ *     }
+ * 
+ * @apiError 404 TypesDappareilNonTrouve Le type de d'appareil demandé n'existe pas
+ * @apiErrorExample {json} Erreur-Exemple:
+ *     HTTP/1.1 404 Not Found
+ *     "Device type not found"
+ */
 
 app.get("/device-types/:name", (req: Request, res: Response) => {
     const name = req.params.name;
@@ -50,11 +88,46 @@ app.get("/device-types/:name", (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @api {post} /device-types Ajouter un type de d'appareil
+ * @apiName AjouterTypeDappareil
+ * @apiGroup TypesDappareil
+ *
+ * @apiParam {String} name Nom du type d'appareil
+ * 
+ * @apiSuccess {String} name Nom du type de d'appareil ajouté
+ * @apiSuccessExample {json} Succès-Exemple:
+ *     HTTP/1.1 201 Created
+ *     {
+ *         "name": "deviceType3"
+ *     }
+ */
+
 app.post("/device-types", validateDeviceType, (req: Request, res: Response) => {
     const deviceType: DeviceType = req.body;
     deviceTypes.push(deviceType);
     res.status(201).json(deviceType);
 });
+
+/**
+ * @api {put} /device-types/:name Modifier un type d'appareil
+ * @apiName ModifierTypeDappareil
+ * @apiGroup TypesDappareil
+ *
+ * @apiParam {String} name Nom du type d'appareil à modifier.
+ *
+ * @apiSuccess (200) {Object} deviceType Objet représentant le type d'appareil modifié.
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "name": "deviceType3"
+ *     }
+ *
+ * @apiError (404) {String} message Message d'erreur indiquant que le type d'appareil n'a pas été trouvé.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     "Device type not found"
+ */
 
 app.put("/device-types/:name", validateDeviceType, (req: Request, res: Response) => {
     const name = req.params.name;
@@ -68,6 +141,24 @@ app.put("/device-types/:name", validateDeviceType, (req: Request, res: Response)
       res.status(200).json(deviceTypes[deviceTypeIndex]);
     }
 });
+
+/**
+ * @api {delete} /device-types/:name Supprimer un type d'appareil
+ * @apiName SupprimerTypeDappareil
+ * @apiGroup TypesDappareil
+ *
+ * @apiParam {String} name Nom du type d'appareil à supprimer.
+ *
+ * @apiSuccess (200) {String} message Message indiquant que le type d'appareil a été supprimé avec succès.
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     "Device type deleted"
+ *
+ * @apiError (404) {String} message Message d'erreur indiquant que le type d'appareil n'a pas été trouvé.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     "Device type not found"
+ */
 
 app.delete("/device-types/:name", (req: Request, res: Response) => {
     const name = req.params.name;
@@ -109,9 +200,50 @@ const validateDeviceModel = (req: Request, res: Response, next: () => void) => {
     next();
 };
 
+/**
+ * @api {get} /device-models Récupérer tous les modèles d'appareil
+ * @apiName ObtenirListeModelesDappareil
+ * @apiGroup ModelsDappareil
+ *
+ * @apiSuccess {Object[]} deviceModels Liste de tous les modèles de périphériques.
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     [
+ *       {
+ *         "name": "deviceModel1",
+ *         "deviceType": {
+            "name": "deviceType1"
+ *         }
+ *       }
+ *     ]
+ */
+
 app.get('/device-models', (req: Request, res: Response) => {
     res.status(200).send(deviceModels);
 });
+
+/**
+ * @api {get} /device-models Récupérer tous les modèles d'appareil par son nom
+ * @apiName ObtenirModelesDappareilParNom
+ * @apiGroup ModelsDappareil
+ *
+ * @apiSuccess {Object[]} Nom du type de Modele d'appareil.
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     [
+ *       {
+ *         "name": "deviceModel1",
+ *         "deviceType": {
+            "name": "deviceType1"
+ *         }
+ *       }
+ *     ]
+ * 
+ * @apiError (404) {String} message Message d'erreur indiquant que le modele d'appareil n'a pas été trouvé.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     "Device model not found"
+ */
 
 app.get('/device-models/:name', (req: Request, res: Response) => {
     const name = req.params.name;
@@ -123,6 +255,31 @@ app.get('/device-models/:name', (req: Request, res: Response) => {
     }
 });
 
+/**
+ * @api {post} /device-models Ajouter un type de modele d'appareil
+ * @apiName AjouterModeleDappareil
+ * @apiGroup ModelsDappareil
+ *
+ * @apiParam {String} name Nom du modele d'appareil
+ * 
+ * @apiSuccess {String} name Nom du type d'appareil ajouté
+ * @apiSuccessExample {json} Succès-Exemple:
+ *     HTTP/1.1 200 OK
+ *     [
+ *       {
+ *         "name": "deviceModel2",
+ *         "deviceType": {
+            "name": "deviceType2"
+ *         }
+ *       }
+ *     ]
+ * 
+ * @apiError (404) {String} message Message d'erreur indiquant que le modele d'appareil n'a pas été trouvé.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     "Invalid device type"
+ */
+
 app.post('/device-models', validateDeviceModel, (req: Request, res: Response) => {
     const newDeviceModel = req.body as DeviceModel;
     const deviceType = deviceTypes.find((dt) => dt.name === newDeviceModel.deviceType.name);
@@ -132,6 +289,29 @@ app.post('/device-models', validateDeviceModel, (req: Request, res: Response) =>
     deviceModels.push(newDeviceModel);
     res.status(201).send(newDeviceModel);
 });
+
+/**
+ * @api {put} /device-model/:name Modifier un modele d'appareil
+ * @apiName ModifierModelDappareil
+ * @apiGroup ModelsDappareil
+ *
+ * @apiParam {String} name Nom du model d'appareil à modifier.
+ *
+ * @apiSuccess (200) {Object} deviceModel Objet représentant le model d'appareil modifié.
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *         "name": "deviceModel2",
+ *         "deviceType": {
+            "name": "deviceType2"
+ *         }
+ *     }
+ *
+ * @apiError (404) {String} message Message d'erreur indiquant que le model d'appareil n'a pas été trouvé.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     "Device model not found"
+ */
 
 app.put('/device-models/:name', validateDeviceModel, (req: Request, res: Response) => {
     const name = req.params.name;
@@ -147,6 +327,24 @@ app.put('/device-models/:name', validateDeviceModel, (req: Request, res: Respons
     deviceModels[deviceModelIndex] = newDeviceModel;
     res.status(200).send(newDeviceModel);
 });
+
+/**
+ * @api {delete} /device-models/:name Supprimer un modele d'appareil
+ * @apiName SupprimerModeleDappareil
+ * @apiGroup ModelsDappareil
+ *
+ * @apiParam {String} name Nom du modele d'appareil à supprimer.
+ *
+ * @apiSuccess (200) {String} message Message indiquant que le modele d'appareil a été supprimé avec succès.
+ * @apiSuccessExample Success-Response:
+ *     HTTP/1.1 200 OK
+ *     "Device model deleted"
+ *
+ * @apiError (404) {String} message Message d'erreur indiquant que le modele d'appareil n'a pas été trouvé.
+ * @apiErrorExample Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     "Device model not found"
+ */
 
 app.delete('/device-models/:name', (req: Request, res: Response) => {
     const name = req.params.name;
