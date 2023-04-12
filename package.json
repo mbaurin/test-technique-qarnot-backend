@@ -1,0 +1,27 @@
+{
+  "name": "test-technique-quarnot-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mbaurin/test-technique-quarnot-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mbaurin/test-technique-quarnot-backend/issues"
+  },
+  "homepage": "https://github.com/mbaurin/test-technique-quarnot-backend#readme",
+  "devDependencies": {
+    "@types/body-parser": "^1.19.2",
+    "@types/express": "^4.17.17",
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "typescript": "^5.0.4"
+  }
+}
