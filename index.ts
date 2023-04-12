@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import Joi from 'joi';
 
 const app = express();
 const port = 3000;
@@ -13,6 +14,18 @@ let deviceTypes: DeviceType[] = [
     {"name": "deviceType1"},
     {"name": "deviceType2"},
 ];
+
+const deviceTypeSchema = Joi.object({
+    name: Joi.string().min(3).max(30).required(),
+});
+
+const validateDeviceType = (req: Request, res: Response, next: () => void) => {
+    const { error } = deviceTypeSchema.validate(req.body);
+    if (error) {
+      return res.status(400).send(error.details[0].message);
+    }
+    next();
+};
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Welcome to Qarnot Technical Test API!');
@@ -41,13 +54,13 @@ app.get("/device-types/:name", (req, res) => {
     }
 });
 
-app.post("/device-types", (req, res) => {
+app.post("/device-types", validateDeviceType, (req, res) => {
     const deviceType: DeviceType = req.body;
     deviceTypes.push(deviceType);
     res.status(201).json(deviceTypes);
 });
 
-app.put("/device-types/:name", (req, res) => {
+app.put("/device-types/:name", validateDeviceType, (req, res) => {
     const name = req.params.name;
     const deviceTypeIndex = deviceTypes.findIndex(
       (deviceType) => deviceType.name === name
