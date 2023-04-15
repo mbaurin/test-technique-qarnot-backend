@@ -1,0 +1,16 @@
+{
+    "name": "Qarnot API",
+    "version": "1.0.0",
+    "description": "Documentation Qarnot API",
+    "title": "My API Documentation",
+    "url": "http://localhost:3000",
+    "template": {
+      "withCompare": true,
+      "withGenerator": true
+    },
+    "sampleUrl": "http://localhost:3000",
+    "exclude": [
+      "node_modules/"
+    ]
+  }
+  
