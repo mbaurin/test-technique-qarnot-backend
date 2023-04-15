@@ -7,3 +7,5 @@ Pour lancer l'API :
 3. npm install
 4. npm run build
 5. npm run start
+
+Vous pouvez consulter la documentation sur la route /api-docs
